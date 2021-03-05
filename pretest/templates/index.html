@@ -23,14 +23,55 @@
         <td>{{employee.email}}</td>
         <td>{{employee.phone}}</td>
         <td>
-          <a href="/update/{{employee.id}}">Edit</a>
+          <button onclick="update('{{employee.id}}','{{employees|length}}')">
+            Edit
+          </button>
           <a
             href="/delete/{{employee.id}}"
             onclick="return confirm('Are You Sure To Delete ?')"
-            >Delete</a
           >
+            <button>Delete</button>
+          </a>
         </td>
       </tr>
+
+      <div class="modal-update" id="modal-update{{employee.id}}" hidden="true">
+        <h4>Update Employee{{employee.id}} Information</h4>
+        <div class="container">
+          <form action="{{url_for('update')}}" method="POST">
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="hidden" name="id" value="{{employee.id}}" />
+              <input type="text" name="name" value="{{employee.name}}" />
+            </div>
+
+            <div class="form-group">
+              <label>Email:</label>
+
+              <input type="text" name="email" value="{{employee.email}}" />
+            </div>
+
+            <div class="form-group">
+              <label>Phone:</label>
+
+              <input
+                type="text"
+                name="phone"
+                pattern="[0-9]{3}[0-9]{4}[0-9]{3}"
+                value="{{employee.phone}}"
+              />
+            </div>
+
+            <div class="form-group">
+              <button type="submit">Update</button>
+            </div>
+          </form>
+        </div>
+        <div class="Close">
+          <button onclick="closeModal('{{employee.id}}')">Close</button>
+        </div>
+      </div>
+
       {% endfor %}
     </table>
   </div>
@@ -62,4 +103,17 @@
   </div>
 </div>
 
+<script>
+  function update(empID, length) {
+    for (let i = 1; i <= length; i++) {
+      if (i != empID) {
+        document.getElementById("modal-update" + [i]).hidden = true;
+      }
+    }
+    document.getElementById("modal-update" + empID).hidden = false;
+  }
+  function closeModal(empID) {
+    document.getElementById("modal-update" + empID).hidden = true;
+  }
+</script>
 {% endblock %}

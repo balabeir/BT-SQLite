@@ -52,8 +52,8 @@ def insert():
 
 
 # this is our update route where we are going to update our employee
-@app.route("/update/<id>", methods=["GET", "POST"])
-def update(id):
+@app.route("/update", methods=["GET", "POST"])
+def update():
 
     if request.method == "POST":
 
@@ -65,10 +65,6 @@ def update(id):
         db.session.commit()
         flash("Employee Updated Successfully")
         return redirect(url_for("index"))
-
-    else:
-        emp = Data.query.filter_by(id=id).first()
-        return render_template("update.html", employee=emp)
 
 
 # This route is for deleting our employee
