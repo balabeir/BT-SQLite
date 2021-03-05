@@ -27,7 +27,7 @@ class Data(db.Model):
 # This is the index route where we are going to
 # query on all our employee data
 @app.route("/")
-def Index():
+def index():
     all_data = Data.query.all()
     return render_template("index.html", employees=all_data)
 
@@ -48,12 +48,12 @@ def insert():
 
         flash("Employee Inserted Successfully")
 
-        return redirect(url_for("Index"))
+        return redirect(url_for("index"))
 
 
 # this is our update route where we are going to update our employee
-@app.route("/update", methods=["GET", "POST"])
-def update():
+@app.route("/update/<id>", methods=["GET", "POST"])
+def update(id):
 
     if request.method == "POST":
 
@@ -64,7 +64,11 @@ def update():
 
         db.session.commit()
         flash("Employee Updated Successfully")
-        return redirect(url_for("Index"))
+        return redirect(url_for("index"))
+
+    else:
+        emp = Data.query.filter_by(id=id).first()
+        return render_template("update.html", employee=emp)
 
 
 # This route is for deleting our employee
@@ -75,7 +79,7 @@ def delete(id):
     db.session.commit()
     flash("Employee Deleted Successfully")
 
-    return redirect(url_for("Index"))
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
